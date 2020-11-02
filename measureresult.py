@@ -288,6 +288,8 @@ class MeasureResult:
         vswr_in_at_stat_freq = round(self._vswr_in[0][stat_freq_index], 2)
         vswr_out_at_stat_freq = round(self._vswr_out[0][stat_freq_index], 2)
 
+        s21_response_at_zero = self._s21s[0][stat_freq_index]
+
         low = self._min_freq_index
         high = self._max_freq_index
         mid = low + (high - low) // 2
@@ -309,6 +311,9 @@ class MeasureResult:
 {self._s21_mins[0]:.02f} дБ на {f1} ГГц
 {self._s21_mins[1]:.02f} дБ на {f2} ГГц
 {self._s21_mins[2]:.02f} дБ на {f3} ГГц
+
+Начальное ослабление:
+{s21_response_at_zero} дБ на {fstat} ГГц
 
 КСВ вх:
 {vswr_in_at_stat_freq} на {fstat} ГГц
