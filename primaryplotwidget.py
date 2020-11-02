@@ -81,9 +81,9 @@ class PrimaryPlotWidget(QWidget):
         # for_states = range(len(self.main_states))
 
         freqs = self._result.freqs
-        s21s = self._result.s21
-        vswr_in = self._result.vswr_in
-        vswr_out = self._result.vswr_out
+        s21s = self._result.s21[:1]
+        vswr_in = self._result.vswr_in[:1]
+        vswr_out = self._result.vswr_out[:1]
 
         n = len(s21s)
 
