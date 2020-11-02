@@ -283,12 +283,19 @@ class MeasureResult:
 
     @property
     def stats(self):
+        stat_freq = self._secondaryParams['Fstat']
+        stat_freq_index = _find_freq_index(self._freqs, stat_freq)
+        vswr_in_at_stat_freq = round(self._vswr_in[0][stat_freq_index], 2)
+        vswr_out_at_stat_freq = round(self._vswr_out[0][stat_freq_index], 2)
+
         low = self._min_freq_index
         high = self._max_freq_index
         mid = low + (high - low) // 2
         f1 = round(self.freqs[low] / 1_000_000_000, 2)
         f2 = round(self.freqs[mid] / 1_000_000_000, 2)
         f3 = round(self.freqs[high] / 1_000_000_000, 2)
+
+        fstat = stat_freq
 
         kp_freq_min = f'{self._kp_freq_min:.02f} ГГц' if self._kp_freq_min != 'n/a' else 'n/a'
         kp_freq_max = f'{self._kp_freq_max:.02f} ГГц' if self._kp_freq_max != 'n/a' else 'n/a'
@@ -302,6 +309,12 @@ class MeasureResult:
 {self._s21_mins[0]:.02f} дБ на {f1} ГГц
 {self._s21_mins[1]:.02f} дБ на {f2} ГГц
 {self._s21_mins[2]:.02f} дБ на {f3} ГГц
+
+КСВ вх:
+{vswr_in_at_stat_freq} на {fstat} ГГц
+
+КСВ вых:
+{vswr_out_at_stat_freq} на {fstat} ГГц
 
 Нижняя граница РЧ, Fн:
 {kp_freq_min}
