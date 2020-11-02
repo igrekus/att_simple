@@ -158,17 +158,6 @@ class MeasureResult:
         vs = list(zip(*self.s21))
         self._s21_mins = [min(vs[self._min_freq_index]), min(vs[mid]), min(vs[self._max_freq_index])]
 
-        vs = list(zip(*self.vswr_in))
-        self._vswr_in_max = [max(vs[self._min_freq_index]), max(vs[mid]), max(vs[self._max_freq_index])]
-
-        vs = list(zip(*self.vswr_out))
-        self._vswr_out_max = [max(vs[self._min_freq_index]), max(vs[mid]), max(vs[self._max_freq_index])]
-
-        self._s21_rmse_values = [self.s21_rmse[self._min_freq_index], self.s21_rmse[mid], self.s21_rmse[self._max_freq_index]]
-
-        vs = list(zip(*self.s21_err))
-        self._s21_err_max = [max(abs(v) for v in vs[self._min_freq_index]), max(abs(v) for v in vs[mid]), max(abs(v) for v in vs[self._max_freq_index])]
-
     def _cal_s21_worst_loss(self):
         min_index = _find_freq_index(self._freqs, self._secondaryParams['Fborder1'])
         max_index = _find_freq_index(self._freqs, self._secondaryParams['Fborder2'])
@@ -313,26 +302,6 @@ class MeasureResult:
 {self._s21_mins[0]:.02f} дБ на {f1} ГГц
 {self._s21_mins[1]:.02f} дБ на {f2} ГГц
 {self._s21_mins[2]:.02f} дБ на {f3} ГГц
-
-КСВ вх, макс:
-{self._vswr_in_max[0]:.02f} на {f1} ГГц
-{self._vswr_in_max[1]:.02f} на {f2} ГГц
-{self._vswr_in_max[2]:.02f} на {f3} ГГц
-
-КСВ вых, макс:
-{self._vswr_out_max[0]:.02f} на {f1} ГГц
-{self._vswr_out_max[1]:.02f} на {f2} ГГц
-{self._vswr_out_max[2]:.02f} на {f3} ГГц
-
-Потери, ошибка:
-{self._s21_err_max[0]:.02f} дБ на {f1} ГГц
-{self._s21_err_max[1]:.02f} дБ на {f2} ГГц
-{self._s21_err_max[2]:.02f} дБ на {f3} ГГц
-
-Потери, СКО:
-{self._s21_rmse_values[0]:.02f} дБ на {f1} ГГц
-{self._s21_rmse_values[1]:.02f} дБ на {f2} ГГц
-{self._s21_rmse_values[2]:.02f} дБ на {f3} ГГц
 
 Нижняя граница РЧ, Fн:
 {kp_freq_min}
