@@ -279,7 +279,6 @@ class MeasureResult:
 {s21_response_at_zero} дБ на {fstat} ГГц
 
 Амплитудная ошибка на {fstat} ГГц:
-состояние: ошибка
 {error}
 
 КСВ:
