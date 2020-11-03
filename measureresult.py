@@ -16,7 +16,7 @@ def calc_vswr(in_mags: list):
 def calc_error(array, zero, ideal):
     _, value = ideal
     value = abs(value)
-    return [abs(a) - abs(z) - value for a, z in zip(array, zero)]
+    return [abs(abs(a) - abs(z) - value) for a, z in zip(array, zero)]
 
 
 def shift_vals(values, shift):
