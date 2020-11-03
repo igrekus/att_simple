@@ -261,10 +261,12 @@ class MeasureResult:
         vswr_in_at_stat_freq = round(self._vswr_in[0][stat_freq_index], 2)
         vswr_out_at_stat_freq = round(self._vswr_out[0][stat_freq_index], 2)
 
-        error = ''
-        for (code, _), s in zip(self._ideal_amp, self._s21s_err):
-            if code in self.main_states:
-                error += f'{code}: {s[stat_freq_index]:.03f}\n'
+        error = '\n'.join(
+            f'{s[stat_freq_index]:.03f} при {code}'
+            for (code, _), s
+            in zip(self._ideal_amp, self._s21s_err)
+            if code in self.main_states
+        )
         return f'''Потребление тока при 5.25 В:
 {cur1} мА, 1 канал
 {cur2} мА, 2 канал
