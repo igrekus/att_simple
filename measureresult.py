@@ -114,8 +114,6 @@ class MeasureResult:
         self._calc_s21_rmse()
         self._calc_stats()
 
-        self._cal_s21_worst_loss()
-
         self.ready = True
 
     def _calc_vwsr_in(self):
@@ -157,29 +155,6 @@ class MeasureResult:
 
         vs = list(zip(*self.s21))
         self._s21_mins = [min(vs[self._min_freq_index]), min(vs[mid]), min(vs[self._max_freq_index])]
-
-    def _cal_s21_worst_loss(self):
-        min_index = _find_freq_index(self._freqs, self._secondaryParams['Fborder1'])
-        max_index = _find_freq_index(self._freqs, self._secondaryParams['Fborder2'])
-
-        # min_index = 0
-        # max_index = len(self._freqs) - 1
-
-        level = self._secondaryParams['kp']
-        mins = [min(vals) for vals in zip(*self._s21s)]
-        res = itertools.groupby(mins, key=lambda x: x > level)
-        res = [list(ls) for val, ls in res if val]
-        if not res:
-            self._kp_freq_min = 'n/a'
-            self._kp_freq_max = 'n/a'
-            return
-        elif len(res) != len(self._freqs):
-            max_size = max(len(el) for el in res)
-            res = list(filter(lambda x: len(x) == max_size, res))[0]
-            min_index = mins.index(res[0])
-            max_index = mins.index(res[-1])
-        self._kp_freq_min = round(self._freqs[min_index] / 1_000_000_000, 2)
-        self._kp_freq_max = round(self._freqs[max_index] / 1_000_000_000, 2)
 
     def _load_ideal(self):
         print(f'reading adjust set from: {self.adjust_set}/')
@@ -308,9 +283,6 @@ class MeasureResult:
 {cur2} мА, 2 канал
 
 Диапазон рабочих частот:
-{curr} мА при 5.25В
-
-Потери, минимум:
 {self._s21_mins[0]:.02f} дБ на {f1} ГГц
 {self._s21_mins[1]:.02f} дБ на {f2} ГГц
 {self._s21_mins[2]:.02f} дБ на {f3} ГГц
@@ -323,10 +295,4 @@ class MeasureResult:
 
 КСВ вых:
 {vswr_out_at_stat_freq} на {fstat} ГГц
-
-Нижняя граница РЧ, Fн:
-{kp_freq_min}
-
-Верхняя граница РЧ, Fв:
-{kp_freq_max}
 '''
