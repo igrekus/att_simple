@@ -67,7 +67,7 @@ class InstrumentController(QObject):
         self._mag_s21s = list()
         self._phs_s21s = list()
         self._phase_values = list()
-        self._current = 0
+        self._current = [0.0, 0.0]
 
     def __str__(self):
         return f'{self._instruments}'
@@ -144,8 +144,29 @@ class InstrumentController(QObject):
     def _measure_s_params(self):
         pna = self._instruments['Анализатор']
         prog = self._instruments['Программатор']
+        src = self._instruments['Источник питания']
 
-        self._current = 0.01
+        src.send('inst:sel outp1')
+        src.send('apply 5.25v,15ma')
+        if not mock_enabled:
+            time.sleep(0.5)
+        cur1 = float(src.query('MEAS:CURR?'))
+
+        src.send('inst:sel outp2')
+        src.send('apply 5.25v,15ma')
+        if not mock_enabled:
+            time.sleep(0.5)
+        cur2 = float(src.query('MEAS:CURR?'))
+
+        self._current = [cur1, cur2]
+        if mock_enabled:
+            self._current = [0.0035, 0.0045]
+        print('read current: ', self._current)
+
+        src.send('inst:sel outp1')
+        src.send('apply 4.75v,15ma')
+        src.send('inst:sel outp2')
+        src.send('apply 4.75v,15ma')
 
         out = []
         for deg, code in self.states.items():

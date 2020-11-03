@@ -230,7 +230,7 @@ class MeasureResult:
         s2p = list(args[1])
         self._ideal_phase = list(args[2])
         self._secondaryParams = dict(args[3])
-        self._current = float(args[4])
+        self._current = list(args[4])
 
         if self.adjust:
             self._load_ideal()
@@ -299,12 +299,15 @@ class MeasureResult:
 
         fstat = stat_freq
 
-        kp_freq_min = f'{self._kp_freq_min:.02f} ГГц' if self._kp_freq_min != 'n/a' else 'n/a'
-        kp_freq_max = f'{self._kp_freq_max:.02f} ГГц' if self._kp_freq_max != 'n/a' else 'n/a'
+        cur1, cur2 = self._current
+        cur1 *= 1_000
+        cur2 *= 1_000
 
-        curr = self._current * 1_000
+        return f'''Потребление тока при 5.25В:
+{cur1} мА, 1 канал
+{cur2} мА, 2 канал
 
-        return f'''Потребление тока:
+Диапазон рабочих частот:
 {curr} мА при 5.25В
 
 Потери, минимум:
