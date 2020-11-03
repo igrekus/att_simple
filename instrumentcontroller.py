@@ -195,6 +195,8 @@ class InstrumentController(QObject):
 
             if not mock_enabled:
                 time.sleep(0.5)
+
+        src.send('*RST')
         return out
 
     def pow_sweep(self):
