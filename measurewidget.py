@@ -132,7 +132,7 @@ class MeasureWidgetWithSecondaryParameters(MeasureWidget):
         self._spinPowIn.setMinimum(-50)
         self._spinPowIn.setMaximum(50)
         self._spinPowIn.setSingleStep(1)
-        self._spinPowIn.setValue(-10)
+        self._spinPowIn.setValue(-20)
         self._spinPowIn.setSuffix(' дБм')
         self._devices._layout.addRow('Pвх=', self._spinPowIn)
 
@@ -140,7 +140,7 @@ class MeasureWidgetWithSecondaryParameters(MeasureWidget):
         self._spinFreqStart.setMinimum(0)
         self._spinFreqStart.setMaximum(20)
         self._spinFreqStart.setSingleStep(1)
-        self._spinFreqStart.setValue(1)
+        self._spinFreqStart.setValue(0.01)
         self._spinFreqStart.setSuffix(' ГГц')
         self._devices._layout.addRow('Fнач=', self._spinFreqStart)
 
@@ -148,7 +148,7 @@ class MeasureWidgetWithSecondaryParameters(MeasureWidget):
         self._spinFreqEnd.setMinimum(0)
         self._spinFreqEnd.setMaximum(20)
         self._spinFreqEnd.setSingleStep(1)
-        self._spinFreqEnd.setValue(4)
+        self._spinFreqEnd.setValue(6)
         self._spinFreqEnd.setSuffix(' ГГц')
         self._devices._layout.addRow('Fкон=', self._spinFreqEnd)
 
@@ -156,7 +156,7 @@ class MeasureWidgetWithSecondaryParameters(MeasureWidget):
         self._spinState.setMinimum(-100)
         self._spinState.setMaximum(100)
         self._spinState.setSingleStep(1)
-        self._spinState.setValue(-9)
+        self._spinState.setValue(-5)
         self._spinState.setSuffix(' dB')
         self._devices._layout.addRow('Kп=', self._spinState)
 
@@ -164,7 +164,7 @@ class MeasureWidgetWithSecondaryParameters(MeasureWidget):
         self._spinFreq1.setMinimum(0)
         self._spinFreq1.setMaximum(20)
         self._spinFreq1.setSingleStep(1)
-        self._spinFreq1.setValue(self._spinFreqStart.value())
+        self._spinFreq1.setValue(0.01)
         self._spinFreq1.setSuffix(' ГГц')
         self._devices._layout.addRow('Fгр1=', self._spinFreq1)
 
@@ -172,7 +172,7 @@ class MeasureWidgetWithSecondaryParameters(MeasureWidget):
         self._spinFreq2.setMinimum(0)
         self._spinFreq2.setMaximum(20)
         self._spinFreq2.setSingleStep(1)
-        self._spinFreq2.setValue(self._spinFreqEnd.value())
+        self._spinFreq2.setValue(6)
         self._spinFreq2.setSuffix(' ГГц')
         self._devices._layout.addRow('Fгр2=', self._spinFreq2)
 
@@ -200,9 +200,6 @@ class MeasureWidgetWithSecondaryParameters(MeasureWidget):
         self._spinFreqEnd.valueChanged.connect(self.on_spinFreqEnd_valueChanged)
         self._spinFreq1.valueChanged.connect(self.on_spinFreq1_valueChanged)
         self._spinFreq2.valueChanged.connect(self.on_spinFreq2_valueChanged)
-
-        self.on_spinFreqStart_valueChanged(2.0)
-        self.on_spinFreqEnd_valueChanged(4.0)
 
     def _modePreConnect(self):
         super()._modePreConnect()
