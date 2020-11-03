@@ -91,7 +91,7 @@ class MeasureResult:
         self._kp_freq_min = 0
         self._kp_freq_max = 0
 
-        self._current = 0
+        self._current = [0.0, 0.0]
 
     def _process(self):
         if self.adjust:
@@ -254,9 +254,7 @@ class MeasureResult:
 
         fstat = stat_freq
 
-        cur1, cur2 = self._current
-        cur1 *= 1_000
-        cur2 *= 1_000
+        cur1, cur2 = [c * 1_000 for c in self._current]
 
         return f'''Потребление тока при 5.25 В:
 {cur1} мА, 1 канал
