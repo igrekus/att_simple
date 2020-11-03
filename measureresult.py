@@ -258,7 +258,7 @@ class MeasureResult:
         cur1 *= 1_000
         cur2 *= 1_000
 
-        return f'''Потребление тока при 5.25В:
+        return f'''Потребление тока при 5.25 В:
 {cur1} мА, 1 канал
 {cur2} мА, 2 канал
 
@@ -269,9 +269,7 @@ class MeasureResult:
 Начальное ослабление:
 {s21_response_at_zero} дБ на {fstat} ГГц
 
-КСВ вх:
-{vswr_in_at_stat_freq} на {fstat} ГГц
-
-КСВ вых:
-{vswr_out_at_stat_freq} на {fstat} ГГц
+КСВ:
+{vswr_in_at_stat_freq} на {fstat} ГГц, вход
+{vswr_out_at_stat_freq} на {fstat} ГГц, выход
 '''
