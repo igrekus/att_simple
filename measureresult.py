@@ -134,13 +134,15 @@ class MeasureResult:
             return
 
     def _calc_stats(self):
-        self._min_freq_index = _find_freq_index(self._freqs, self._secondaryParams['Fborder1'])
-        self._max_freq_index = _find_freq_index(self._freqs, self._secondaryParams['Fborder2'])
-
-        mid = self._min_freq_index + abs(self._max_freq_index - self._min_freq_index) // 2
-
-        vs = list(zip(*self.s21))
-        self._s21_mins = [min(vs[self._min_freq_index]), min(vs[mid]), min(vs[self._max_freq_index])]
+        vs = self._s21s[0]
+        level = self._secondaryParams['kp']
+        self._min_freq_index = 0
+        try:
+            self._max_freq_index = next(i for i, v in enumerate(vs) if v < level)
+        except Exception as ex:
+            print('error searching for working bandwidth:', ex)
+            self._max_freq_index = len(self._freqs) - 1
+        self._s21_mins = [vs[self._min_freq_index], vs[self._max_freq_index]]
 
     def _load_ideal(self):
         print(f'reading adjust set from: {self.adjust_set}/')
@@ -247,12 +249,8 @@ class MeasureResult:
 
         s21_response_at_zero = self._s21s[0][stat_freq_index]
 
-        low = self._min_freq_index
-        high = self._max_freq_index
-        mid = low + (high - low) // 2
-        f1 = round(self.freqs[low] / 1_000_000_000, 2)
-        f2 = round(self.freqs[mid] / 1_000_000_000, 2)
-        f3 = round(self.freqs[high] / 1_000_000_000, 2)
+        f1 = round(self.freqs[self._min_freq_index] / 1_000_000_000, 2)
+        f2 = round(self.freqs[self._max_freq_index] / 1_000_000_000, 2)
 
         fstat = stat_freq
 
@@ -267,7 +265,6 @@ class MeasureResult:
 Диапазон рабочих частот:
 {self._s21_mins[0]:.02f} дБ на {f1} ГГц
 {self._s21_mins[1]:.02f} дБ на {f2} ГГц
-{self._s21_mins[2]:.02f} дБ на {f3} ГГц
 
 Начальное ослабление:
 {s21_response_at_zero} дБ на {fstat} ГГц
