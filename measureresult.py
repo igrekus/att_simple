@@ -13,8 +13,10 @@ def calc_vswr(in_mags: list):
     return list(out)
 
 
-def calc_error(array, zero):
-    return [a - z for a, z in zip(array, zero)]
+def calc_error(array, zero, ideal):
+    _, value = ideal
+    value = abs(value)
+    return [abs(a) - abs(z) - value for a, z in zip(array, zero)]
 
 
 def shift_vals(values, shift):
@@ -43,6 +45,7 @@ class MeasureResult:
 
         self.headers = list()
         self._secondaryParams = dict()
+        self._ideal_amp = list()
 
         self._freqs = list()
         self._s21s = list()
@@ -74,6 +77,8 @@ class MeasureResult:
 
     def _init(self):
         self._secondaryParams.clear()
+        self._ideal_amp.clear()
+
         self._freqs.clear()
         self._s21s.clear()
         self._s21s_err.clear()
@@ -114,8 +119,8 @@ class MeasureResult:
         self._vswr_out = [calc_vswr(s) for s in self._s22s]
 
     def _calc_s21_err(self):
-        means = [statistics.mean(vs) for vs in zip(*self._s21s)]
-        self._s21s_err = [calc_error(s, means) for s in self._s21s]
+        s21_0 = self._s21s[0]
+        self._s21s_err = [calc_error(s, s21_0, ideal) for s, ideal in zip(self._s21s, self._ideal_amp)]
 
     def _adjust_data(self, what):
         if what == 'err':
@@ -191,7 +196,7 @@ class MeasureResult:
 
         points = int(args[0])
         s2p = list(args[1])
-        self._ideal_phase = list(args[2])
+        self._ideal_amp = list(args[2])
         self._secondaryParams = dict(args[3])
         self._current = list(args[4])
 

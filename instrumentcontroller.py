@@ -10,7 +10,7 @@ from measureresult import MeasureResult
 
 class InstrumentController(QObject):
     states = {
-        i * 5.625: i for i in range(64)
+        i * 0.25: i for i in range(64)
     }
 
     main_states = [0, 1, 2, 4, 8, 16, 32, 63]
@@ -66,7 +66,7 @@ class InstrumentController(QObject):
         self._mag_s22s = list()
         self._mag_s21s = list()
         self._phs_s21s = list()
-        self._phase_values = list()
+        self._amp_values = list()
         self._current = [0.0, 0.0]
 
     def __str__(self):
@@ -101,7 +101,7 @@ class InstrumentController(QObject):
     def measure(self, params):
         print(f'call measure with {params}')
         device, secondary = params
-        self.result.raw_data = self.sweep_points, self._measure(device, secondary), self._phase_values, self.secondaryParams, self._current
+        self.result.raw_data = self.sweep_points, self._measure(device, secondary), self._amp_values, self.secondaryParams, self._current
         self.hasResult = bool(self.result)
 
     def _measure(self, device, secondary):
@@ -115,7 +115,7 @@ class InstrumentController(QObject):
         return self._measure_s_params()
 
     def _clear(self):
-        self._phase_values.clear()
+        self._amp_values.clear()
 
     def _init(self, params):
         pna = self._instruments['Анализатор']
@@ -169,10 +169,10 @@ class InstrumentController(QObject):
         src.send('apply 4.75v,15ma')
 
         out = []
-        for deg, code in self.states.items():
+        for amp, code in self.states.items():
             if self.only_main_states and code not in self.main_states:
                 continue
-            self._phase_values.append(deg)
+            self._amp_values.append((code, amp))
 
             prog.set_lpf_code(code)
 
