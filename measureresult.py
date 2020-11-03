@@ -247,10 +247,10 @@ class MeasureResult:
 
     @property
     def stats(self):
+        cur1, cur2 = [c * 1_000 for c in self._current]
+
         stat_freq = self._secondaryParams['Fstat']
         stat_freq_index = _find_freq_index(self._freqs, stat_freq)
-        vswr_in_at_stat_freq = round(self._vswr_in[0][stat_freq_index], 2)
-        vswr_out_at_stat_freq = round(self._vswr_out[0][stat_freq_index], 2)
 
         s21_response_at_zero = self._s21s[0][stat_freq_index]
 
@@ -258,8 +258,8 @@ class MeasureResult:
         f2 = round(self.freqs[self._max_freq_index] / 1_000_000_000, 2)
 
         fstat = stat_freq
-
-        cur1, cur2 = [c * 1_000 for c in self._current]
+        vswr_in_at_stat_freq = round(self._vswr_in[0][stat_freq_index], 2)
+        vswr_out_at_stat_freq = round(self._vswr_out[0][stat_freq_index], 2)
 
         return f'''Потребление тока при 5.25 В:
 {cur1} мА, 1 канал
