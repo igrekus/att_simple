@@ -17,10 +17,6 @@ def calc_error(array, zero):
     return [a - z for a, z in zip(array, zero)]
 
 
-def calc_rmse_amp(values, mean):
-    return math.sqrt(sum(pow(v, 2) for v in values) / len(values))
-
-
 def shift_vals(values, shift):
     return [s + shift for s in values]
 
@@ -51,7 +47,6 @@ class MeasureResult:
         self._freqs = list()
         self._s21s = list()
         self._s21s_err = list()
-        self._s21s_rmse = list()
         self._s11s = list()
         self._s22s = list()
 
@@ -61,7 +56,6 @@ class MeasureResult:
         self._s21_mins = list()
         self._vswr_in_max = list()
         self._vswr_out_max = list()
-        self._s21_rmse_values = list()
         self._s21_err_max = list()
 
         self._kp_freq_min = 0
@@ -83,7 +77,6 @@ class MeasureResult:
         self._freqs.clear()
         self._s21s.clear()
         self._s21s_err.clear()
-        self._s21s_rmse.clear()
         self._s11s.clear()
         self._s22s.clear()
 
@@ -93,7 +86,6 @@ class MeasureResult:
         self._s21_mins.clear()
         self._vswr_in_max.clear()
         self._vswr_out_max.clear()
-        self._s21_rmse_values.clear()
         self._s21_err_max.clear()
 
         self._kp_freq_min = 0
@@ -111,7 +103,6 @@ class MeasureResult:
         self._calc_s21_err()
         if self.adjust:
             self._adjust_data('err')
-        self._calc_s21_rmse()
         self._calc_stats()
 
         self.ready = True
@@ -125,11 +116,6 @@ class MeasureResult:
     def _calc_s21_err(self):
         means = [statistics.mean(vs) for vs in zip(*self._s21s)]
         self._s21s_err = [calc_error(s, means) for s in self._s21s]
-
-    def _calc_s21_rmse(self):
-        means = [statistics.mean(vs) for vs in zip(*self._s21s)]
-        for *vs, mean in zip(*self._s21s_err, means):
-            self._s21s_rmse.append(calc_rmse_amp(vs, mean))
 
     def _adjust_data(self, what):
         if what == 'err':
@@ -243,10 +229,6 @@ class MeasureResult:
     @property
     def s21_err(self):
         return self._s21s_err
-
-    @property
-    def s21_rmse(self):
-        return self._s21s_rmse
 
     @property
     def adjust_set(self):
