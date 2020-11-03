@@ -152,13 +152,13 @@ class MeasureWidgetWithSecondaryParameters(MeasureWidget):
         self._spinFreqEnd.setSuffix(' ГГц')
         self._devices._layout.addRow('Fкон=', self._spinFreqEnd)
 
-        self._spinState = QDoubleSpinBox(parent=self)
-        self._spinState.setMinimum(-100)
-        self._spinState.setMaximum(100)
-        self._spinState.setSingleStep(1)
-        self._spinState.setValue(-5)
-        self._spinState.setSuffix(' dB')
-        self._devices._layout.addRow('Kп=', self._spinState)
+        self._spinLevel = QDoubleSpinBox(parent=self)
+        self._spinLevel.setMinimum(-100)
+        self._spinLevel.setMaximum(100)
+        self._spinLevel.setSingleStep(1)
+        self._spinLevel.setValue(-5)
+        self._spinLevel.setSuffix(' dB')
+        self._devices._layout.addRow('Kп=', self._spinLevel)
 
         self._spinFreq1 = QDoubleSpinBox(parent=self)
         self._spinFreq1.setMinimum(0)
@@ -191,7 +191,7 @@ class MeasureWidgetWithSecondaryParameters(MeasureWidget):
         self._spinPowIn.valueChanged.connect(self.on_params_changed)
         self._spinFreqStart.valueChanged.connect(self.on_params_changed)
         self._spinFreqEnd.valueChanged.connect(self.on_params_changed)
-        self._spinState.valueChanged.connect(self.on_params_changed)
+        self._spinLevel.valueChanged.connect(self.on_params_changed)
         self._spinFreq1.valueChanged.connect(self.on_params_changed)
         self._spinFreq2.valueChanged.connect(self.on_params_changed)
         self._spinFreqStat.valueChanged.connect(self.on_params_changed)
@@ -262,7 +262,7 @@ class MeasureWidgetWithSecondaryParameters(MeasureWidget):
             'Pin': self._spinPowIn.value(),
             'F1': self._spinFreqStart.value(),
             'F2': self._spinFreqEnd.value(),
-            'kp': self._spinState.value(),
+            'kp': self._spinLevel.value(),
             'Fborder1': self._spinFreq1.value(),
             'Fborder2': self._spinFreq2.value(),
             'Fstat': self._spinFreqStat.value()
