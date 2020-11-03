@@ -51,7 +51,7 @@ class InstrumentController(QObject):
         }
 
         self.sweep_points = 201
-        self.cal_set = 'Upr_tst'
+        self.cal_set = '-20db_pyatkin_6G'
 
         self._instruments = dict()
         self.found = False
