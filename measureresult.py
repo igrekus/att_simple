@@ -272,11 +272,11 @@ class MeasureResult:
 {cur2} мА, 2 канал
 
 Диапазон рабочих частот:
-{self._s21_mins[0]:.02f} дБ на {f1} ГГц
-{self._s21_mins[1]:.02f} дБ на {f2} ГГц
+Fнач {f1} ГГц
+Fкон {f2} ГГц
 
 Начальное ослабление:
-{s21_response_at_zero} дБ на {fstat} ГГц
+{s21_response_at_zero:.02f} дБ на {fstat} ГГц
 
 Амплитудная ошибка на {fstat} ГГц:
 {error}
