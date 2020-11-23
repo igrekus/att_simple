@@ -1,7 +1,4 @@
-import itertools
-import math
 import random
-import statistics
 
 
 def calc_vswr(in_mags: list):
