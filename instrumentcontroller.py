@@ -100,24 +100,24 @@ class InstrumentController(QObject):
 
     def measure(self, params):
         print(f'call measure with {params}')
-        device, secondary = params
-        self.result.raw_data = self.sweep_points, self._measure(device, secondary), self._amp_values, self.secondaryParams, self._current
+        device, _ = params
+        self.result.raw_data = self.sweep_points, self._measure(device), self._amp_values, self.secondaryParams, self._current
         self.hasResult = bool(self.result)
 
-    def _measure(self, device, secondary):
+    def _measure(self, device):
         param = self.deviceParams[device]
         secondary = self.secondaryParams
         print(f'launch measure with {param} {secondary}')
 
         self._clear()
-        self._init(secondary)
+        self._init()
 
         return self._measure_s_params()
 
     def _clear(self):
         self._amp_values.clear()
 
-    def _init(self, params):
+    def _init(self):
         pna = self._instruments['Анализатор']
         prog = self._instruments['Программатор']
 
@@ -133,8 +133,8 @@ class InstrumentController(QObject):
 
         pna.send(f'SENS1:SWE:POIN {self.sweep_points}')
 
-        pna.send(f'SENS1:FREQ:STAR {params["F1"]}GHz')
-        pna.send(f'SENS1:FREQ:STOP {params["F2"]}GHz')
+        pna.send(f'SENS1:FREQ:STAR {self.secondaryParams["F1"]}GHz')
+        pna.send(f'SENS1:FREQ:STOP {self.secondaryParams["F2"]}GHz')
 
         pna.send('SENS1:SWE:MODE CONT')
         pna.send(f'FORM:DATA ASCII')
