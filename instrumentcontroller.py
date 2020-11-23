@@ -168,33 +168,40 @@ class InstrumentController(QObject):
         src.send('inst:sel outp2')
         src.send('apply 4.75v,15ma')
 
-        out = []
-        for amp, code in self.states.items():
-            if self.only_main_states and code not in self.main_states:
-                continue
-            self._amp_values.append((code, amp))
+        cycles = self.secondaryParams['cycles']
+        out = list()
+        for cycle in range(cycles):
+            print('measure cycle:', cycle)
 
-            prog.set_lpf_code(code)
+            out.clear()
+            self._amp_values.clear()
 
-            if not mock_enabled:
-                time.sleep(0.5)
+            for amp, code in self.states.items():
+                if self.only_main_states and code not in self.main_states:
+                    continue
+                self._amp_values.append((code, amp))
 
-            pna.send(f'CALC1:PAR:SEL "CH1_S21"')
-            pna.query('*OPC?')
-            res = pna.query(f'CALC1:DATA:SNP? 2')
+                prog.set_lpf_code(code)
 
-            # pna.send(f'CALC:DATA:SNP:PORTs:Save "1,2", "d:/ksa/att_simple/s{code}.s2p"')
-            # pna.send(f'MMEM:STOR "d:/ksa/att_simple1/s{code}.s2p"')
+                if not mock_enabled:
+                    time.sleep(0.5)
 
-            # with open(f's2p_{code}.s2p', mode='wt', encoding='utf-8') as f:
-            #     f.write(res)
-            if mock_enabled:
-                with open(f'ref/sample_data/s2p_{code}.s2p', mode='rt', encoding='utf-8') as f:
-                    res = list(f.readlines())[0].strip()
-            out.append(parse_float_list(res))
+                pna.send(f'CALC1:PAR:SEL "CH1_S21"')
+                pna.query('*OPC?')
+                res = pna.query(f'CALC1:DATA:SNP? 2')
 
-            if not mock_enabled:
-                time.sleep(0.5)
+                # pna.send(f'CALC:DATA:SNP:PORTs:Save "1,2", "d:/ksa/att_simple/s{code}.s2p"')
+                # pna.send(f'MMEM:STOR "d:/ksa/att_simple1/s{code}.s2p"')
+
+                # with open(f's2p_{code}.s2p', mode='wt', encoding='utf-8') as f:
+                #     f.write(res)
+                if mock_enabled:
+                    with open(f'ref/sample_data/s2p_{code}.s2p', mode='rt', encoding='utf-8') as f:
+                        res = list(f.readlines())[0].strip()
+                out.append(parse_float_list(res))
+
+                if not mock_enabled:
+                    time.sleep(0.5)
 
         src.send('*RST')
         return out

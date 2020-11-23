@@ -184,6 +184,13 @@ class MeasureWidgetWithSecondaryParameters(MeasureWidget):
         self._spinFreqStat.setSuffix(' ГГц')
         self._devices._layout.addRow('Fstat=', self._spinFreqStat)
 
+        self._spinCycles = QSpinBox(parent=self)
+        self._spinCycles.setMinimum(1)
+        self._spinCycles.setMaximum(10000)
+        self._spinCycles.setSingleStep(1)
+        self._spinCycles.setValue(1)
+        self._devices._layout.addRow('N=', self._spinCycles)
+
         self._connectSignals()
 
     def _connectSignals(self):
@@ -195,6 +202,7 @@ class MeasureWidgetWithSecondaryParameters(MeasureWidget):
         self._spinFreq1.valueChanged.connect(self.on_params_changed)
         self._spinFreq2.valueChanged.connect(self.on_params_changed)
         self._spinFreqStat.valueChanged.connect(self.on_params_changed)
+        self._spinCycles.valueChanged.connect(self.on_params_changed)
 
         self._spinFreqStart.valueChanged.connect(self.on_spinFreqStart_valueChanged)
         self._spinFreqEnd.valueChanged.connect(self.on_spinFreqEnd_valueChanged)
@@ -265,6 +273,7 @@ class MeasureWidgetWithSecondaryParameters(MeasureWidget):
             'kp': self._spinLevel.value(),
             'Fborder1': self._spinFreq1.value(),
             'Fborder2': self._spinFreq2.value(),
-            'Fstat': self._spinFreqStat.value()
+            'Fstat': self._spinFreqStat.value(),
+            'cycles': self._spinCycles.value()
         }
         self.secondaryChanged.emit(params)
